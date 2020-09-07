@@ -1,0 +1,25 @@
+{
+  "name": "nav-connector-2",
+  "version": "1.0.0",
+  "description": "Js client to the v2 api of the Hungarian Tax and Customs authority",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nav",
+    "online",
+    "invoice",
+    "szamla",
+    "2"
+  ],
+  "author": "",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "cuid": "^2.1.8",
+    "fast-xml-parser": "^3.17.4",
+    "lodash": "^4.17.20"
+  },
+  "typings": "./src/index.d.ts"
+}
