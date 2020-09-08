@@ -1,6 +1,9 @@
 import { TaxNumberType, DetailedAddressType } from "./InvoiceDataType"
 
-export type Taxpayer_CORE = boolean
+export type Taxpayer_CORE = {
+  taxpayerValidity: boolean,
+  infoDate: string | null
+}
 export type Taxpayer_RAW = TaxpayerDataType | null
 export type Taxpayer_FORMATTED = TaxpayerDataType | null
 

@@ -19,21 +19,13 @@ module.exports = async function queryInvoiceDigest({
     softwareData,
   });
 
-  const {
-    page,
-    invoiceDirection,
-    mandatory,
-    additional,
-    relational,
-    transaction
-  } = invoiceDigestParams;
+  const { page, invoiceDirection } = invoiceDigestParams;
   const namedInvoiceDigestParams = {
-    mandatoryQueryParams: mandatory,
-    additionalQueryParams: additional,
-    realtionalQueryParams: relational,
-    transactionQueryParams: transaction
-  }
-  // pick assigns the properties in the provided order, and order is important here
+    mandatoryQueryParams: invoiceDigestParams.mandatory,
+    additionalQueryParams: invoiceDigestParams.additional,
+    realtionalQueryParams: invoiceDigestParams.relational,
+    transactionQueryParams: invoiceDigestParams.transaction,
+  };
   const invoiceQueryParams = pick(namedInvoiceDigestParams, [
     "mandatoryQueryParams",
     "additionalQueryParams",
@@ -44,7 +36,7 @@ module.exports = async function queryInvoiceDigest({
   Object.assign(request[requestType], {
     page,
     invoiceDirection,
-    invoiceQueryParams
+    invoiceQueryParams,
   });
 
   const response = await sendRequest({
@@ -77,7 +69,7 @@ module.exports = async function queryInvoiceDigest({
         : Array.isArray(response[responseType][responseDataType].invoiceDigest)
         ? response[responseType][responseDataType].invoiceDigest.length
         : 1,
-      core: response[responseType][responseDataType].invoiceDigest
+      core: response[responseType][responseDataType].invoiceDigest,
     },
     errors: null,
   };

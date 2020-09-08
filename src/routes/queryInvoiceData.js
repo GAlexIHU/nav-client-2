@@ -20,7 +20,6 @@ module.exports = async function queryInvoiceData({
     softwareData
   })
 
-  // pick assigns the properties in the provided order, and order is important here
   const invoiceNumberQuery = pick(invoiceDataParams, [
     "invoiceNumber",
     "invoiceDirection",
@@ -49,7 +48,7 @@ module.exports = async function queryInvoiceData({
     data: null,
     errors: null
   })
-
+  // Forwarding the raw base64 data when the data is compressed.
   if (response[responseType][responseDataType].compressedContentIndicator) return ({
     result: response[responseType].result,
     data: {
@@ -63,9 +62,7 @@ module.exports = async function queryInvoiceData({
 
   // Converting the base64 string when no compression was applied
   const invoiceDataBase64 = response[responseType][responseDataType].invoiceData;
-  const buff = Buffer.from(invoiceDataBase64, "base64");
-  const invoiceDataXML = buff.toString("utf-8");
-  const invoiceData = parseResponseXML(invoiceDataXML);
+  const invoiceData = parseResponseXML(Buffer.from(invoiceDataBase64, "base64").toString("utf-8"));
 
   const formattedData = response[responseType][responseDataType]
   Object.assign(formattedData, {
@@ -78,7 +75,7 @@ module.exports = async function queryInvoiceData({
       raw: response[responseType][responseDataType],
       formatted: formattedData,
       length: 1,
-      core: invoiceData.InvoiceData
+      core: formattedFata.invoiceData.InvoiceData
     },
     errors: null
   })

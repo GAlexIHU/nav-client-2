@@ -3,8 +3,8 @@ const { createRequestXML, parseResponseXML } = require("./xmlParsing");
 /**
  * Handles the actual sending of the request, the conversions between XMl and JsObjects, and the error-handling.
  * ```
- * IT CURRENTLY DOESNT SUPPORT NEITHER GZIPPING, NOR HAS COMPLETE ERROR HANDLING IN PLACE!
- * ``` 
+ * IT CURRENTLY DOESNT SUPPORT GZIPPING, NOR HAS COMPLETE ERROR HANDLING IN PLACE!
+ * ```
  */
 module.exports = async function sendRequest({ request, axios, route }) {
   const requestXml = createRequestXML(request);
@@ -13,6 +13,12 @@ module.exports = async function sendRequest({ request, axios, route }) {
     const data = parseResponseXML(response.data);
     return data;
   } catch (error) {
+    // In the magical case that it's not an axios error
+    if (!error.isAxiosError) return returnUnknownError("XML parsing error")
+    // When there was a timeout error
+    if (error.code === "ECONNABORTED") return returnUnknownError("Connection aborted, timeout possibly exceeded")
+    // When there was no response or there is no connection
+    if (!error.response) return returnUnknownError("Connection error")
     const { response } = error;
     const errorXML = response.data;
 
@@ -44,20 +50,17 @@ module.exports = async function sendRequest({ request, axios, route }) {
           technicalValidationMessages: null,
         },
       };
-
-    // safeguard
-    return {
-      error: {
-        result: {
-          funcCode: "ERROR",
-        },
-        technicalValidationMessages: [
-          {
-            validationResultCode: "ERROR",
-            message: "Unknown error! (created by the lib)",
-          },
-        ],
-      },
-    };
+    // This line never ought to be reached, but it's here in case the API were to change in the future
+    return returnUnknownError("Unknown error, the API has changed!")
   }
-};
+}
+
+const returnUnknownError = (message = "Unknown error! (created by the lib)") => ({
+  error: {
+    result: {
+      funcCode: "ERROR",
+      message
+    },
+    technicalValidationMessages: null
+  },
+});

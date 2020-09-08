@@ -19,7 +19,6 @@ module.exports = async function queryInvoiceCheck({
     softwareData
   })
 
-  // pick assigns the properties in the provided order, and order is important here
   const invoiceNumberQuery = pick(invoiceCheckParams, [
     "invoiceNumber",
     "invoiceDirection",

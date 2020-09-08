@@ -57,7 +57,11 @@ module.exports = async function queryTransactionStatus({
   };
 };
 
-// As the formatting is quite complex and ugly here, i decided to extract it to this function
+/**
+ * Handles the formatting of the results object (base64=>xml=>jsObj)
+ * 
+ * DOESN'T CURRENTLY HANDLE COMPRESSED DATA!
+ */
 const formatRawData = (processingResults) => ({
   ...processingResults,
   processingResult: Array.isArray(processingResults.processingResult)

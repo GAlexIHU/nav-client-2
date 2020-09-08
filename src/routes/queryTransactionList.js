@@ -35,14 +35,7 @@ module.exports = async function queryTransactionList({
       data: null,
       errors: response.error["technicalValidationMessages"],
     };
-  // Case where the invoice doesn't actually exist (no data is sent back about it)
-  if (!response[responseType][responseDataType])
-    return {
-      result: response[responseType].result,
-      data: null,
-      errors: null,
-    };
-
+  
   return {
     result: response[responseType].result,
     data: {
