@@ -1,6 +1,6 @@
 type InvoiceDataParams = {
   invoiceNumber: string,
-  invoiceDirection: ["INBOUND", "OUTBOUND"],
+  invoiceDirection: "INBOUND" | "OUTBOUND",
   batchIndex?: number,
   supplierTaxNumber?: string
 }

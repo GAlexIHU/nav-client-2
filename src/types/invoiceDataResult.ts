@@ -9,7 +9,7 @@ type InvoiceDataResultType = {
 type AuditDataType = {
   insDate: string,
   insCusUser: string,
-  source: ["WEB", "XML", "M2M", "OPG"],
+  source: "WEB" | "XML" | "M2M" | "OPG",
   transactionId?: string,
   index?: number,
   batchIndex?: number,

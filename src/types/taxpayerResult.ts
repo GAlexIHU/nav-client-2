@@ -20,6 +20,6 @@ type TaxpayerDataType = {
 }
 
 type TaxpayerAddressItemType = {
-  taxpayerAddressType: ["HQ", "SITE", "BRANCH"],
+  taxpayerAddressType: "HQ" | "SITE" | "BRANCH",
   taxpayerAddress: DetailedAddressType
 }

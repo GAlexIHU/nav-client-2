@@ -24,7 +24,7 @@ type InvoiceChainElementType = {
 type InvoiceChainDigestType = {
   invoiceNumber: number,
   batchIndex?: number,
-  invoiceOperation: ["CREATE", "MODIFY", "STORNO"] | string,
+  invoiceOperation: "CREATE" | "MODIFY" | "STORNO" | string,
   supplierTaxNumber: string,
   customertaxNumber: string,
   insDate: string,

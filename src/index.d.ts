@@ -6,6 +6,8 @@ import InvoiceDigestOptions from "./types/invoiceDigestParams";
 import TransactionListOptions from "./types/transcationListParams";
 import TransactionStatusOptions from "./types/transactionStatusParams";
 import TaxpayerOptions from "./types/taxpayerParams";
+import AnnulmentOperationList from "./types/manageAnnulmentParams";
+import InvoiceOperationList from "./types/manageInvoiceParams";
 
 // RESPONSES
 import {
@@ -49,6 +51,7 @@ declare class NavClient {
    * The Class representing the NavClient API.
    * All public endpoints of the NAV Online API are matched to the methods of this class.
    * All class methods are asynchronous, and their result implement the NavClient.GeneralResponse interface.
+   * 
    * When errorChecking the results, one should always test the response.result.validationResultCode property.
    * ```js
    * const client = new NavClient(NavClientOptions);
@@ -69,6 +72,31 @@ declare class NavClient {
     timeount?: number;
     sandbox?: boolean;
   });
+  /**
+   * The operation is used for submitting technical annulment codes. 
+   * Technical annulment can only be submitted for data reports that have already been received and given the DONE status by NAV.  
+   * @param {number} maxNumberOfRetries By default is one, and should be an integer.
+   * @returns {object} All parameters of the GeneralResponseType (except for length) are equal to the transactionId sent back from the API.
+   * 
+   * The annulmentOperationList cannot be longer than a 100 entries, nor can be empty, and should adhere to the AnnulmentOperationList type!
+   * Compression of the annulmentData is not supported in this client! The total size limit of the request is 10MB!
+   */
+  manageAnnulment(
+    annulmentOperationList: NavClient.AnnulmentOperationListType,
+    maxNumberOfRetries?: number
+  ): Promise<NavClient.GeneralResponse<string, string, string>>;
+  /**
+   * The operation used for submitting the reported invoice data to NAV, which includes those for the original, modifying or cancelling invoices. 
+   * @param {number} maxNumberOfRetries By default is one, and should be an integer.
+   * @returns {object} All parameters of the GeneralResponseType (except for length) are equal to the transactionId sent back from the API.
+   * 
+   * The invoiceOperationList cannot be longer than a 100 entries, nor can be empty, and should adhere to the InvoiceOperationList type!
+   * Compression of the invoiceData is not supported in this client! The total size limit of the request is 10MB!
+   */
+  manageInvoice(
+    invoiceOperationList: NavClient.InvoiceOperationListType,
+    maxNumberOfRetries?: number
+  ): Promise<NavClient.GeneralResponse<string, string, string>>
   /**
    * The operation returns a pageable invoice list matching the query parameters provided.
    * The items in the list are the items in the invoice chain for the specified base invoice.
@@ -114,6 +142,13 @@ declare class NavClient {
   queryTaxpayer(
     taxpayerParams: NavClient.TaxpayerParams
   ): Promise<NavClient.GeneralResponse<T_RAW, T_FORMATTED, T_CORE>>;
+  /**
+   * Attempts to obtain connection to the server, and returns whether it was succesful.
+   * @param maxNumberOfRetries Decides how many attempts the client should make in total at obtaining connection to the server. Default is one, should be an integer.
+   */
+  testConnection(
+    maxNumberOfRetries?: number
+  ): Promise<boolean>
 }
 
 declare namespace NavClient {
@@ -158,6 +193,8 @@ declare namespace NavClient {
   export type TransactionListParams = TransactionListOptions;
   export type TransactionStatusParams = TransactionStatusOptions;
   export type TaxpayerParams = TaxpayerOptions;
+  export type InvoiceOperationListType = InvoiceOperationList;
+  export type AnnulmentOperationListType = AnnulmentOperationList;
 }
 
 export = NavClient;

@@ -12,6 +12,9 @@ const queryInvoiceDigest = require("./routes/queryInvoiceDigest");
 const queryTransactionList = require("./routes/queryTransactionList");
 const queryTransactionStatus = require("./routes/queryTransactionStatus");
 const queryTaxpayer = require("./routes/queryTaxpayer");
+const tokenExchange = require("./routes/tokenExchange");
+const manageAnnulment = require("./routes/manageAnnulment");
+const manageInvoice = require("./routes/manageInvoice");
 
 // The Class Representing the NavClient API
 module.exports = class NavClient {
@@ -27,6 +30,40 @@ module.exports = class NavClient {
         encoding: "UTF-8",
       },
     });
+  }
+
+  async manageAnnulment(annulmentOperationList, maxNumberOfRetries) {
+    const exchangeToken = await tokenExchange({
+      userData: this.userData,
+      softwareData: this.softwareData,
+      axios: this.axios,
+      maxNumberOfRetries
+    });
+
+    return await manageAnnulment({
+      userData: this.userData,
+      softwareData: this.softwareData,
+      axios: this.axios,
+      exchangeKey: exchangeToken,
+      annulmentOperationList
+    })
+  }
+
+  async manageInvoice(invoiceOperationList, maxNumberOfRetries) {
+    const exchangeToken = await tokenExchange({
+      userData: this.userData,
+      softwareData: this.softwareData,
+      axios: this.axios,
+      maxNumberOfRetries
+    });
+
+    return await manageInvoice({
+      userData: this.userData,
+      softwareData: this.softwareData,
+      axios: this.axios,
+      exchangeKey: exchangeToken,
+      invoiceOperationList
+    })
   }
 
   async queryInvoiceChainDigest(invoiceChainDigestParams) {
@@ -91,4 +128,15 @@ module.exports = class NavClient {
       axios: this.axios,
     });
   }
+
+  async testConnection(maxNumberOfRetries) {
+    const response = await tokenExchange({
+      userData: this.userData,
+      softwareData: this.softwareData,
+      axios: this.axios,
+      maxNumberOfRetries
+    })
+    return response.result.funcCode === "ERROR" ? false : true
+  }
 };
+

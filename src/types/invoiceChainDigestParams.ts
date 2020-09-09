@@ -1,7 +1,7 @@
 type InvoiceChainDigestParams = {
   page: number,
   invoiceNumber: string,
-  invoiceDirection: ["INBOUND", "OUTBOUND"],
+  invoiceDirection:  "INBOUND" | "OUTBOUND",
   taxnumber?: string
 }
 
