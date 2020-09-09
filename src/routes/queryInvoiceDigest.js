@@ -51,25 +51,24 @@ module.exports = async function queryInvoiceDigest({
       data: null,
       errors: response.error["technicalValidationMessages"],
     };
-  // Case where the invoice doesn't actually exist (no data is sent back about it)
-  if (!response[responseType][responseDataType])
-    return {
-      result: response[responseType].result,
-      data: null,
-      errors: null,
-    };
+
+  // Normalizing the invoiceDigest property to an Array
+  const formattedResponseData = {
+    ...response[responseType][responseDataType],
+    invoiceDigest: !response[responseType][responseDataType].invoiceDigest
+      ? []
+      : Array.isArray(response[responseType][responseDataType].invoiceDigest)
+      ? response[responseType][responseDataType].invoiceDigest
+      : [response[responseType][responseDataType].invoiceDigest],
+  };
 
   return {
     result: response[responseType].result,
     data: {
       raw: response[responseType][responseDataType],
-      formatted: response[responseType][responseDataType],
-      length: !response[responseType][responseDataType].invoiceDigest
-        ? 0
-        : Array.isArray(response[responseType][responseDataType].invoiceDigest)
-        ? response[responseType][responseDataType].invoiceDigest.length
-        : 1,
-      core: response[responseType][responseDataType].invoiceDigest,
+      formatted: formattedResponseData,
+      length: formattedResponseData.invoiceDigest.length,
+      core: formattedResponseData.invoiceDigest,
     },
     errors: null,
   };

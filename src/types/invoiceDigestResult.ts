@@ -1,11 +1,13 @@
-export type QueryInvoiceDigestResults_RAW = InvoiceDigestResultType
+export type QueryInvoiceDigestResults_RAW = InvoiceDigestResultType & {
+  invoiceDigest: undefined | null | InvoiceDigestType | Array<InvoiceDigestType>
+}
 export type QueryInvoiceDigestResults_FORMATTED = InvoiceDigestResultType
-export type QueryInvoiceDigestResults_CORE = InvoiceDigestType | Array<InvoiceDigestType>
+export type QueryInvoiceDigestResults_CORE = Array<InvoiceDigestType> | []
 
 type InvoiceDigestResultType = {
   currentPage: number,
   availablePage: number,
-  invoiceDigest?: InvoiceDigestType | Array<InvoiceDigestType>
+  invoiceDigest: Array<InvoiceDigestType> | []
 }
 
 type InvoiceDigestType = {

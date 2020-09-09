@@ -48,17 +48,23 @@ module.exports = async function queryInvoiceChainDigest({
     };
   }
 
+  // Normalizing the invoiceChainElement property to an Array
+  const formattedResponseData = {
+    ...response[responseType][responseDataType],
+    invoiceChainElement: !response[responseType][responseDataType].invoiceChainElement
+      ? []
+      : Array.isArray(response[responseType][responseDataType].invoiceChainElement)
+      ? response[responseType][responseDataType].invoiceChainElement
+      : [ response[responseType][responseDataType].invoiceChainElement ]
+  }
+
   return {
     result: response[responseType].result,
     data: {
       raw: response[responseType][responseDataType],
-      formatted: response[responseType][responseDataType],
-      length: !response[responseType][responseDataType].invoiceChainElement
-        ? 0
-        : Array.isArray(response[responseType][responseDataType].invoiceChainElement)
-        ? response[responseType][responseDataType].invoiceChainElement.length
-        : 1,
-      core: response[responseType][responseDataType].invoiceChainElement || null,
+      formatted: formattedResponseData,
+      length: formattedResponseData.invoiceChainElement.length,
+      core: formattedResponseData.invoiceChainElement,
     },
     errors: null,
   };

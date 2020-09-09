@@ -1,11 +1,13 @@
-export type TransactionListResult_RAW = TransactionListResultType;
+export type TransactionListResult_RAW = TransactionListResultType & {
+  transaction: undefined | null | TransactionType | Array<TransactionType> 
+};
 export type TransactionListResult_FORMATTED = TransactionListResultType;
-export type TransactionListResult_CORE = TransactionType | Array<TransactionType> | null;
+export type TransactionListResult_CORE = Array<TransactionType> | [];
 
 type TransactionListResultType = {
   currentPage: number;
   availablePage: number;
-  transaction?: TransactionType | Array<TransactionType>;
+  transaction: Array<TransactionType> | [];
 };
 
 type TransactionType = {

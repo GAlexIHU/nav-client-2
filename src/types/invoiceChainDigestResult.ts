@@ -1,11 +1,13 @@
-export type InvoiceChainDigestResult_RAW = InvoiceChainDigestResultType
+export type InvoiceChainDigestResult_RAW = InvoiceChainDigestResultType & {
+  invoiceChainElement: undefined | null | InvoiceChainElementType | Array<InvoiceChainElementType>
+}
 export type InvoiceChainDigestResult_FORMATTED = InvoiceChainDigestResultType
-export type InvoiceChainDigestResult_CORE = InvoiceChainElementType | Array<InvoiceChainElementType> | null
+export type InvoiceChainDigestResult_CORE = Array<InvoiceChainElementType> | []
 
 type InvoiceChainDigestResultType = {
   currentPage: number,
   availablePage: number,
-  invoiceChainElement: InvoiceChainElementType | Array<InvoiceChainElementType>
+  invoiceChainElement: Array<InvoiceChainElementType> | []
 }
 
 type InvoiceChainElementType = {

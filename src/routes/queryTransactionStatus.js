@@ -45,13 +45,15 @@ module.exports = async function queryTransactionStatus({
       errors: null,
     };
   // Case when there's actually a meaningful response
+  const formattedResponseData = formatRawData(response[responseType][responseDataType]);
+
   return {
     result: response[responseType].result,
     data: {
       raw: response[responseType][responseDataType],
-      formatted: formatRawData(response[responseType][responseDataType]),
-      length: getResultsLength(response[responseType][responseDataType]),
-      core: formatRawData(response[responseType][responseDataType]).processingResult,
+      formatted: formattedResponseData,
+      length: formattedResponseData,
+      core: formattedResponseData.processingResult,
     },
     errors: null,
   };
@@ -60,7 +62,7 @@ module.exports = async function queryTransactionStatus({
 /**
  * Handles the formatting of the results object (base64=>xml=>jsObj)
  * 
- * DOESN'T CURRENTLY HANDLE COMPRESSED DATA!
+ * DOESN'T CURRENTLY HANDLE COMPRESSED DATA! (this inserts much type uncertainty!)
  */
 const formatRawData = (processingResults) => ({
   ...processingResults,
@@ -73,7 +75,7 @@ const formatRawData = (processingResults) => ({
           ? parseResponseXML(Buffer.from(item.originalRequest, "base64").toString("utf-8"))
           : null,
       }))
-    : {
+    : [{
         ...processingResults.processingResult,
         originalRequest: processingResults.processingResult.compressedContentIndicator
           ? processingResults.processingResult.originalRequest
@@ -84,8 +86,5 @@ const formatRawData = (processingResults) => ({
               )
             )
           : null,
-      },
+      }],
 });
-
-const getResultsLength = (processingResults) =>
-  Array.isArray(processingResults.processingResult) ? processingResults.processingResult.length : 1;

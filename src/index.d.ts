@@ -52,6 +52,11 @@ declare class NavClient {
    * All public endpoints of the NAV Online API are matched to the methods of this class.
    * All class methods are asynchronous, and their result implement the NavClient.GeneralResponse interface.
    * 
+   * @param {NavClient.UserData} userData The user specific data (the technical user's data provided by the service)
+   * @param {NavClient.SoftwareData} softwareData The descriptor data of the software / program that communicates with the API.
+   * @param {number} [timeout = 60000] The timeout of the calls. Should be left unchanged for avoiding both infinitely pending respons on outages and dropped responses.
+   * @param {boolean} [sandbox = false] Decides whether to use the development testing API or the production API of the service.
+   * 
    * When errorChecking the results, one should always test the response.result.validationResultCode property.
    * ```js
    * const client = new NavClient(NavClientOptions);
@@ -69,7 +74,7 @@ declare class NavClient {
   constructor(NavClientOptions: {
     userData: NavClient.UserData;
     softwareData: NavClient.SoftwareData;
-    timeount?: number;
+    timeout?: number;
     sandbox?: boolean;
   });
   /**

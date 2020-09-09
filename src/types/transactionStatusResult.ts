@@ -1,13 +1,11 @@
 export type ProcessingStatusResults_RAW = ProcessingResultListType;
 export type ProcessingStatusResults_FORMATTED = ProcessingResultListType & {
-  processingResult: ProcessingResultType_FORMATTED | Array<ProcessingResultType_FORMATTED>;
+  processingResult: Array<ProcessingResultType_FORMATTED>;
 };
-export type ProcessingStatusResults_CORE =
-  | ProcessingResultType_FORMATTED
-  | Array<ProcessingResultType_FORMATTED>;
+export type ProcessingStatusResults_CORE = Array<ProcessingResultType_FORMATTED>;
 
 type ProcessingResultListType = {
-  processingResult: ProcessingResultType | Array<ProcessingResultType>;
+  processingResult: Array<ProcessingResultType>;
   originalRequestVersion: string;
   annulmentData?: AnnulmentDataType;
 };

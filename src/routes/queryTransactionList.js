@@ -36,17 +36,23 @@ module.exports = async function queryTransactionList({
       errors: response.error["technicalValidationMessages"],
     };
   
+  // Normalizing the transaction property to an Array
+  const formattedResponseData = {
+    ...response[responseType][responseDataType],
+    transaction: !response[responseType][responseDataType].transaction
+      ? []
+      : Array.isArray(response[responseType][responseDataType].transaction)
+      ? response[responseType][responseDataType].transaction
+      : [ response[responseType][responseDataType].transaction ]
+  }
+
   return {
     result: response[responseType].result,
     data: {
       raw: response[responseType][responseDataType],
-      formatted: response[responseType][responseDataType],
-      length: !response[responseType][responseDataType].transaction
-        ? 0
-        : Array.isArray(response[responseType][responseDataType].transaction)
-        ? response[responseType][responseDataType].transaction.length
-        : 1,
-      core: response[responseType][responseDataType].transaction || null
+      formatted: formattedResponseData,
+      length: formattedResponseData.transaction.length,
+      core: formattedResponseData.transaction
     },
     errors: null,
   };
