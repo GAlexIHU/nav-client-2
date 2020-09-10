@@ -94,7 +94,7 @@ const client = new NavClient({
       console.log("Processing succeeded!")
     } else if (processingResult.invoiceStatus === "ABORTED") {
       // The specific error information (when present) can be found in either technicalValidationMessages or businessValidationMessages
-      console.log("Processing has been aborted, an error might have occured!)
+      console.log("Processing has been aborted, an error might have occured!")
     } else {
       console.log("Still processing...")
     }
