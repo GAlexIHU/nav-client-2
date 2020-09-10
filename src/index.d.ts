@@ -57,12 +57,13 @@ declare class NavClient {
    * @param {number} [timeout = 60000] The timeout of the calls. Should be left unchanged for avoiding both infinitely pending respons on outages and dropped responses.
    * @param {boolean} [sandbox = false] Decides whether to use the development testing API or the production API of the service.
    * 
-   * When errorChecking the results, one should always test the response.result.validationResultCode property.
+   * When error-checking the results, one should always test the response.result.funcCode property.
+   * This property (as of the 2020 august version of the API) is either "OK" or "ERROR".
    * ```js
    * const client = new NavClient(NavClientOptions);
    * client.queryInvoiceCheck(invoiceCheckParams)
    *  .then(resp => {
-   *    if (resp.result.validationResultCode === "ERROR") {
+   *    if (resp.result.funcCode === "ERROR") {
    *       resp.errors ? console.log(resp.errors) : console.log(resp.result)
    *    } else {
    *      console.log(resp)

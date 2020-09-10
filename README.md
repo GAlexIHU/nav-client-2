@@ -107,6 +107,23 @@ const client = new NavClient({
 
 ## NavClient API
 
+### Full list of methods
+
+NavClient API methods
+
+* manageAnnulment
+* manageInvoice
+* queryInvoiceChainDigest
+* queryInvoiceCheck
+* queryInvoiceData
+* queryInvoiceDigest
+* queryTaxpayer
+* queryTransactionList
+* queryTransactionStatus
+* testConnection
+
+Type definitions are provided for all the parameters and the return values.
+
 ### NavClient
 
 The class representing the NAV Online API.
@@ -213,6 +230,18 @@ type NavClient.InvoiceDataParams = {
 }
 ```
 
+Example use:
+```js
+const response = await client.queryInvoiceData({
+  invoiceDirection: "INBOUND",
+  invoiceNumber: "invoice-number"
+})
+
+// invoiceMain holds the actual invoice object, the other two sort of speak for themselves.
+const { invoiceIssueDate, invoiceMain, invoiceNumber } = response.data.core;
+
+```
+
 ### queryInvoiceDigest
 
 Method that allows for querying the invoices stored in the NAV Online service.
@@ -242,3 +271,78 @@ interface InvoiceDigestParams {
 }
 // See src/types/invoiceDigestParams.ts for more details.
 ```
+
+Example use:
+
+```js
+/* First basic alternative */
+const response = await client.queryInvoiceDigest({
+  invoiceDirection: "INBOUND",
+  page: 1,
+  mandatory: {
+    invoiceIssueDate: {
+      dateFrom: "2020-08-01",
+      dateTo: "2020-08-30"
+    }
+  }
+})
+
+/* Second basic alternative */
+const response = await client.queryInvoiceDigest({
+  invoiceDirection: "INBOUND",
+  page: 1,
+  mandatory: {
+    insDate: {
+      dateFrom: (new Date( Date.now() - 30 * 24 * 60 * 60 * 1000 )).toISOString(),
+      dateTo: (new Date()).toISOString()
+    }
+  }
+})
+
+/* Third basic alternative */
+const response = await client.queryInvoiceDigest({
+  invoiceDirection: "OUTBOUND",
+  page: 1,
+  mandatory: {
+    originalInvoiceNumber: "original invoice number"
+  }
+})
+
+
+// Printing out the insertion timestamps of the retrieved invoices.
+const invoiceDigestArray = response.data.core;
+invoiceDigestArray.forEach(invoiceDigest => console.log(invoiceDigest.insDate))
+
+```
+
+Alongside the mandatory parameters, you can narrow your search using an abundance of query parameters, the details of which can be found in the type definitions (src/types/invoiceDigestParams.ts).
+
+## queryTaxpayer
+
+Method that allows for checking a vat number's validity and retrieving the taxpayer details.
+
+```js
+
+const response = await client.queryTaxpayer({
+  taxNumber: "12345678"
+});
+
+const { infoDate, taxpayerValidity } = response.data.core;
+// Only the first two properties are guaranteed to have a value.
+const { taxpayerName, taxNumberDetail, taxpayerShortName, taxpayerAddressList, vatGroupMembership } = response.data.formatted;
+
+```
+
+**Taxpayer validity should always be checked, as if that's not true, there might be no data sent back under response.data.formatted and response.data.raw!**
+
+## queryTransactionStatus
+
+Method that allows for querying the status and result of the invoice data reporting process.
+
+See the example in the beggining of this README!
+
+## Maintenance
+
+This repository is maintained by a single person, done in his free-time. 
+
+PRs, fixes, ideas are welcome!
