@@ -1,5 +1,5 @@
 {
-  "name": "nav-client-2",
+  "name": "@galexihu/nav-client-2",
   "version": "1.0.0",
   "description": "NodeJs client to interface with the V2 API of the Hungarian Tax and Customs authority",
   "main": "./src/index.js",
@@ -17,7 +17,7 @@
     "szamla",
     "2"
   ],
-  "author": "",
+  "author": "galexihu",
   "license": "GPL-3.0",
   "dependencies": {
     "axios": "^0.20.0",
@@ -25,5 +25,10 @@
     "fast-xml-parser": "^3.17.4",
     "lodash": "^4.17.20"
   },
-  "typings": "./src/index.d.ts"
+  "typings": "./src/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/GAlexIHU/nav-client-2/issues"
+  },
+  "homepage": "https://github.com/GAlexIHU/nav-client-2#readme",
+  "devDependencies": {}
 }
