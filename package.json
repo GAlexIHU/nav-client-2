@@ -1,6 +1,6 @@
 {
   "name": "@galexihu/nav-client-2",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NodeJs client to interface with the V2 API of the Hungarian Tax and Customs authority",
   "main": "./src/index.js",
   "scripts": {
